@@ -1,12 +1,18 @@
 import { Route, Routes } from "react-router-dom";
+import ForgotPassword from "./pages/ForgotPassword";
+import Home from "./pages/Home";
 import SingIn from "./pages/SingIn";
 import SingUp from "./pages/SingUp";
+import { PrivateRoute } from "./PrivateRoute";
 
 const RoutesService = () => {
+
     return (
         <Routes>
             <Route path="/login" element={<SingIn />}></Route>
             <Route path="/register" element={<SingUp />}></Route>
+            <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+            <Route path="/" element={<PrivateRoute children={<Home />} />}></Route>
         </Routes>
     );
 };

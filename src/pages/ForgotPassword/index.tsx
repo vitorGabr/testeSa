@@ -1,17 +1,15 @@
 import { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { AuthContext } from "../../context/AuthContext";
+import { forgotPassword } from "../../service/auth";
 import { Container } from "./styles";
 
-const SingIn = () => {
+const ForgotPassword = () => {
 
-    const { singInUser } = useContext(AuthContext);
     const [username, setuserName] = useState('');
-    const [password, setPassword] = useState('');
 
     const handleSubmit = async () => {
-        if (username === '' || password === '') {
+        if (username === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -20,9 +18,19 @@ const SingIn = () => {
             return;
         }
         try {
-            await singInUser({
-                username,
-                password
+            const result = await forgotPassword(username);
+            if (result && result.username) {
+                Swal.fire({
+                    icon: 'success',
+                    text: 'error as unknown as string',
+                    title: 'Error',
+                });
+                return;
+            }
+            Swal.fire({
+                icon: 'error',
+                text: 'Usuário não encontrado!',
+                title: 'Error',
             });
         } catch (error) {
             Swal.fire({
@@ -45,11 +53,6 @@ const SingIn = () => {
                     <Form.Control placeholder="Enter email" onChange={(e) => setuserName(e.target.value)} />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Senha</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-                </Form.Group>
-
                 <Button variant="primary" type="submit">
                     Entrar
                 </Button>
@@ -58,4 +61,4 @@ const SingIn = () => {
     )
 }
 
-export default SingIn;
+export default ForgotPassword;

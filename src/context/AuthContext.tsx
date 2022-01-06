@@ -1,5 +1,8 @@
 import { createContext, ReactElement, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { api } from "../service/api";
+import { forgotPassword, singIn, singUp } from "../service/auth";
 
 export type SignInData = {
     username: string,
@@ -7,7 +10,7 @@ export type SignInData = {
 }
 
 type AuthContextType = {
-
+    singOutUser: () => void,
     singInUser: (data: SignInData) => Promise<void>
     registerUser: (data: SignInData) => Promise<void>
 }
@@ -15,35 +18,35 @@ type AuthContextType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 interface AuthProviderProps {
-    children: ReactElement | ReactElement[]
+    children: ReactElement | ReactElement[];
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
 
-
-
-    async function singInUser({ }: SignInData) {
-
-
-    }
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    const navigate = useNavigate();
 
     async function registerUser(data: SignInData) {
-
+        const result = await singUp(data);
+        return result;
     }
 
+    async function singInUser(data: SignInData) {
+        const result = await singIn(data);
+        setCookie('token', result, { path: '/' });
+        api.defaults.headers.common['Authorization'] = `Bearer ${result}`;
+        navigate('/');
+    }
 
     async function singOutUser() {
-
-    }
-
-    async function forgotPassword(email: string) {
-
+        removeCookie('token');
+        navigate('/login');
     }
 
     return (
-        <AuthContext.Provider value={{ user, forgotPassword, setUser, registerUser, isAuthenticated, singInUser, singOutUser }
+        <AuthContext.Provider value={{ singOutUser, registerUser, singInUser }
         }>
             {children}
-            < /AuthContext.Provider>
-            );
+        </AuthContext.Provider>
+    )
 }
