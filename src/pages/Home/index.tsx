@@ -1,9 +1,13 @@
 import { useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import CreateFeed from "../../components/CreateFeed";
+import CustomLoading from "../../components/CustomLoading";
+import FeedCard from "../../components/Feed";
 import { AuthContext } from "../../context/AuthContext";
 import Feed from "../../models/Feed";
 import Reaction from "../../models/Reaction";
 import { getFeeds, getReaction } from "../../service/feeds";
+import { Container, Content, Header } from "./styles";
 
 const Home = () => {
 
@@ -47,35 +51,30 @@ const Home = () => {
     }, []);
 
     return (
-        <div>
-            <button
-                onClick={() => singOutUser()}
-            >Sair</button>
-            <h1>Home</h1>
-            <button
-                onClick={() => setOpen(true)}
-            >Registrar</button>
-            {isLoading ? <div>Loading...</div> :
-                <div>
+        <Container>
+            <Header>
+                <h1>Home</h1>
+                <div className="action">
+                    <Button className="create-feed feed-btn" onClick={() =>setOpen(true)}>
+                        Criar Feed
+                    </Button>
+                    <Button className="feed-btn"  onClick={() =>  singOutUser()}>
+                        Sair
+                    </Button>
+                </div>
+            </Header>
+            {isLoading ? <CustomLoading /> :
+                <Content>
                     {
                         feeds.map(feed => {
                             return (
-                                <div key={feed.id}>
-                                    <h3>{feed.author.username}</h3>
-                                    <p>{feed.content}</p>
-                                    <p>{feed.activeUserLikedIt} LIKE</p>
-                                    <p>{feed.activeUserLovedIt} LOVE</p>
-                                    <button
-                                        onClick={() => handleLike(feed, true)}
-                                    >LIKE</button>
-                                    <button
-                                        onClick={() => handleLike(feed, false)}
-                                    >LOVE</button>
-                                </div>
+                                <FeedCard data={feed} key={feed.id} />
+                                   
+                               
                             )
                         })
                     }
-                </div>
+                </Content>
             }
             {
                 <CreateFeed
@@ -89,7 +88,7 @@ const Home = () => {
                     }}
                 />
             }
-        </div>
+        </Container>
     )
 }
 
