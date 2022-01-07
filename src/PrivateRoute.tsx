@@ -1,5 +1,5 @@
 import { useCookies } from "react-cookie";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 interface PrivateRouteProps {
     children: JSX.Element;
@@ -24,4 +24,14 @@ export const IsAuth = (token?: string) => {
         return false
     }
 
+}
+
+export const IsAuthOutlet = ({ children }: PrivateRouteProps) => {
+    const isAuth = IsAuth();
+
+    if (isAuth) {
+        return <Navigate to="/" />
+    }
+
+    return children
 }

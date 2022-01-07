@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { forgotPassword } from "../../service/auth";
 import { Container } from "./styles";
@@ -22,8 +23,8 @@ const ForgotPassword = () => {
             if (result && result.username) {
                 Swal.fire({
                     icon: 'success',
-                    text: 'error as unknown as string',
-                    title: 'Error',
+                    text: `Username: ${result.username}, Password: ${result.password}`,
+                    title: 'Sucesso',
                 });
                 return;
             }
@@ -43,18 +44,20 @@ const ForgotPassword = () => {
 
     return (
         <Container>
-            <h1>Login</h1>
             <Form className="col-md-4" onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmit();
             }}>
+                <h1>Recuperar senha</h1>
                 <Form.Group className="mb-3" controlId="formBasicEmail" >
                     <Form.Label>Username</Form.Label>
-                    <Form.Control placeholder="Enter email" onChange={(e) => setuserName(e.target.value)} />
+                    <Form.Control placeholder="Username" onChange={(e) => setuserName(e.target.value)} />
                 </Form.Group>
-
+                <p>
+                    <Link to="/login">Ir para o Login</Link>
+                </p>
                 <Button variant="primary" type="submit">
-                    Entrar
+                    BUSCAR
                 </Button>
             </Form>
         </Container>

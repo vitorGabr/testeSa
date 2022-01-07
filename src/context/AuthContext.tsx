@@ -2,7 +2,7 @@ import { createContext, ReactElement, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { api } from "../service/api";
-import { forgotPassword, singIn, singUp } from "../service/auth";
+import { singIn, singUp } from "../service/auth";
 
 export type SignInData = {
     username: string,

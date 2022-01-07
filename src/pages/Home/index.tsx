@@ -22,7 +22,7 @@ const Home = () => {
             const result = await getFeeds();
             setFeeds(result);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -35,13 +35,16 @@ const Home = () => {
             love: isLike ? feed.activeUserLovedIt === 1 ?? false : feed.activeUserLovedIt === 0 ?? false,
         }
         try {
-            setLoading(true);
             await getReaction(_data);
-            handleFeeds();
+            const _feeds = [...feeds];
+            _feeds[feeds.indexOf(feed)] = {
+                ...feed,
+                activeUserLikedIt: _data.like ? 1 : 0,
+                activeUserLovedIt: _data.love ? 1 : 0,
+            };
+            setFeeds(_feeds);
         } catch (error) {
 
-        } finally {
-            setLoading(false);
         }
     }
 
@@ -55,10 +58,10 @@ const Home = () => {
             <Header>
                 <h1>Home</h1>
                 <div className="action">
-                    <Button className="create-feed feed-btn" onClick={() =>setOpen(true)}>
+                    <Button className="create-feed feed-btn" onClick={() => setOpen(true)}>
                         Criar Feed
                     </Button>
-                    <Button className="feed-btn"  onClick={() =>  singOutUser()}>
+                    <Button className="feed-btn" onClick={() => singOutUser()}>
                         Sair
                     </Button>
                 </div>
@@ -68,9 +71,13 @@ const Home = () => {
                     {
                         feeds.map(feed => {
                             return (
-                                <FeedCard data={feed} key={feed.id} />
-                                   
-                               
+                                <FeedCard
+                                    data={feed}
+                                    key={feed.id}
+                                    handleClick={(isLike: boolean) => handleLike(feed, isLike)}
+                                />
+
+
                             )
                         })
                     }
@@ -81,7 +88,6 @@ const Home = () => {
                     modalIsOpen={isOpen}
                     closeModal={(isReload?: boolean) => {
                         setOpen(false);
-                        console.log(isReload);
                         if (isReload) {
                             handleFeeds();
                         }

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
 import { Container } from "./styles";
@@ -45,23 +45,25 @@ const SingUp = () => {
 
     return (
         <Container>
-            <h1>Registrar</h1>
-            <Form className="col-md-12" onSubmit={(e) => {
+            <Form className="col-md-4" onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmit();
             }}>
+                <h1>CADASTRAR</h1>
                 <Form.Group className="mb-3" controlId="formBasicEmail" >
                     <Form.Label>Username</Form.Label>
-                    <Form.Control placeholder="Enter email" onChange={(e) => setuserName(e.target.value)} />
+                    <Form.Control placeholder="Username" onChange={(e) => setuserName(e.target.value)} />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Senha</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                    <Form.Control type="Senha" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                 </Form.Group>
-
+                <p>
+                    Já possui uma conta? <Link to="/login">Entre</Link>
+                </p>
                 <Button variant="primary" type="submit">
-                    Entrasdar
+                    SALVAR
                 </Button>
             </Form>
         </Container>

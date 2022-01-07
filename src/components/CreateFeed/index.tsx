@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { postFeed } from "../../service/feeds";
 
 
@@ -23,24 +23,29 @@ const CreateFeed = ({ modalIsOpen, closeModal }: IProps) => {
     return (
         <Modal show={modalIsOpen} onHide={closeModal}>
             <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+                <Modal.Title>Criar Feed</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form>
-                    <input type="text"
+                    <Form.Label htmlFor="inputPassword5">Conteúdo do Feed</Form.Label>
+                    <Form.Control
+                        aria-describedby="ContentBlock"
                         onChange={(e) => setContent(e.target.value)}
                     />
-                    <Button variant="secondary" onClick={handleCreate}>
-                        Close
-                    </Button>
+                    <Form.Text id="ContentBlock" muted>
+                        Você deve escrever algo para publicar.
+                    </Form.Text>
                 </form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={() => closeModal()}>
-                    Close
+                    Fechar
                 </Button>
-                <Button variant="primary" onClick={() => closeModal()}>
-                    Save Changes
+                <Button
+                    disabled={content.length === 0}
+                    variant="primary"
+                    onClick={() => handleCreate()}>
+                    Salvar
                 </Button>
             </Modal.Footer>
         </Modal>
